@@ -1,0 +1,4 @@
+CREATE TABLE IF NOT EXISTS download_events (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  created_at TEXT NOT NULL
+);

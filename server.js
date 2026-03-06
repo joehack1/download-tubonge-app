@@ -14,6 +14,7 @@ const STATIC_ROUTES = new Map([
   ["/index.html", "index.html"],
   ["/thank-you.html", "thank-you.html"],
   ["/styles.css", "styles.css"],
+  ["/counter-config.js", "counter-config.js"],
   ["/app.js", "app.js"],
   ["/logo2.png", "logo2.png"],
   ["/tubonge.apk", "tubonge.apk"],

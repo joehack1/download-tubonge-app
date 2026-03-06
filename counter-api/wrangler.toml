@@ -1,0 +1,9 @@
+name = "tubonge-download-counter"
+main = "src/index.mjs"
+compatibility_date = "2026-03-06"
+workers_dev = true
+
+[[d1_databases]]
+binding = "DB"
+database_name = "tubonge-download-counter"
+database_id = "REPLACE_WITH_YOUR_D1_DATABASE_ID"

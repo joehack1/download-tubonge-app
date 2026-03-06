@@ -1,13 +1,32 @@
 const downloadButton = document.getElementById("dlBtn");
 const LOCAL_STORE_KEY = "tubonge-site-data";
+const REMOTE_API_BASE = normalizeApiBase(window.TUBONGE_COUNTER_CONFIG?.apiBaseUrl || "");
+
+let counterMode = "unknown";
+
+function normalizeApiBase(value) {
+  return String(value || "").trim().replace(/\/+$/, "");
+}
 
 function resolveRelativeUrl(relativePath) {
   return new URL(relativePath, window.location.href).toString();
 }
 
+function resolveApiUrl(pathname, apiBase = "") {
+  const cleanPath = String(pathname).replace(/^\/+/, "");
+  return apiBase ? `${apiBase}/${cleanPath}` : resolveRelativeUrl(cleanPath);
+}
+
 function normalizeStore(store = {}) {
   return {
     downloads: Array.isArray(store.downloads) ? store.downloads : [],
+  };
+}
+
+function normalizeStats(stats = {}) {
+  return {
+    downloadCount: Number(stats.downloadCount || 0),
+    recentDownloads: Array.isArray(stats.recentDownloads) ? stats.recentDownloads : [],
   };
 }
 
@@ -118,19 +137,87 @@ function renderDownloads(entries) {
 }
 
 function renderStats(stats) {
-  const downloadsLabel = `${stats.downloadCount} total`;
+  const normalizedStats = normalizeStats(stats);
+  const downloadsLabel = `${normalizedStats.downloadCount} total`;
 
-  setTextForAll("[data-download-count]", String(stats.downloadCount));
+  setTextForAll("[data-download-count]", String(normalizedStats.downloadCount));
 
   document.querySelectorAll(".pill[data-download-count]").forEach((node) => {
     node.textContent = downloadsLabel;
   });
 
-  renderDownloads(stats.recentDownloads || []);
+  renderDownloads(normalizedStats.recentDownloads);
 }
 
-function loadStats() {
+function isJsonResponse(response) {
+  const contentType = response.headers.get("content-type") || "";
+  return contentType.toLowerCase().includes("application/json");
+}
+
+async function requestJson(url, options = {}) {
+  const response = await fetch(url, options);
+
+  if (!isJsonResponse(response)) {
+    const error = new Error("Counter API returned a non-JSON response.");
+    error.code = "NON_JSON_RESPONSE";
+    error.status = response.status;
+    throw error;
+  }
+
+  const payload = await response.json();
+
+  if (!response.ok) {
+    const error = new Error(payload.error || "Counter request failed.");
+    error.code = "API_ERROR";
+    error.status = response.status;
+    throw error;
+  }
+
+  return payload;
+}
+
+async function loadRemoteStats(apiBase) {
+  return normalizeStats(
+    await requestJson(resolveApiUrl("api/stats", apiBase), {
+      headers: { Accept: "application/json" },
+    }),
+  );
+}
+
+async function recordRemoteDownload(apiBase) {
+  return normalizeStats(
+    await requestJson(resolveApiUrl("api/downloads", apiBase), {
+      method: "POST",
+      headers: { Accept: "application/json" },
+      keepalive: true,
+    }),
+  );
+}
+
+function renderLocalStats() {
+  counterMode = "local";
   renderStats(summarizeStore(readLocalStore()));
+}
+
+async function loadStats() {
+  if (REMOTE_API_BASE) {
+    try {
+      const stats = await loadRemoteStats(REMOTE_API_BASE);
+      counterMode = "remote";
+      renderStats(stats);
+      return;
+    } catch (error) {
+      console.warn("Remote counter API unavailable, falling back.", error);
+    }
+  }
+
+  try {
+    const stats = await loadRemoteStats("");
+    counterMode = "server";
+    renderStats(stats);
+  } catch {
+    renderLocalStats();
+  }
 }
 
 function setUpDownloadRedirect() {
@@ -141,10 +228,25 @@ function setUpDownloadRedirect() {
   downloadButton.addEventListener("click", () => {
     downloadButton.classList.add("is-busy");
 
-    const stats = recordDownloadLocally();
+    if (counterMode === "remote" && REMOTE_API_BASE) {
+      void recordRemoteDownload(REMOTE_API_BASE)
+        .then((stats) => {
+          renderStats(stats);
+        })
+        .catch((error) => {
+          console.warn("Remote download counter failed, falling back locally.", error);
+          const stats = recordDownloadLocally();
 
-    if (stats) {
-      renderStats(stats);
+          if (stats) {
+            renderStats(stats);
+          }
+        });
+    } else if (counterMode === "local" || !counterMode || counterMode === "unknown") {
+      const stats = recordDownloadLocally();
+
+      if (stats) {
+        renderStats(stats);
+      }
     }
 
     window.setTimeout(() => {
@@ -154,4 +256,4 @@ function setUpDownloadRedirect() {
 }
 
 setUpDownloadRedirect();
-loadStats();
+void loadStats();
