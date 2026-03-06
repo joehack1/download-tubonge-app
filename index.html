@@ -2,138 +2,203 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Tubonge – Chat App</title>
-  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tubonge - Chat App</title>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --pink:     #FF4FAE;
-      --pink-light: #FF85C8;
-      --pink-pale: #FFD6EE;
-      --pink-deep: #C2185B;
-      --bubblegum: #FFF0F8;
-      --purple:   #B04FD8;
-      --yellow:   #FFE066;
-      --white:    #FFFFFF;
-      --text:     #3A1030;
-      --subtext:  #8B4470;
+      --ink: #111111;
+      --ink-soft: #4e4e4e;
+      --accent: #ff4fae;
+      --accent-strong: #b81e6c;
+      --pink-soft: #ffd8ea;
+      --pink-mist: #fff2f8;
+      --line: rgba(17, 17, 17, 0.12);
+      --panel: rgba(255, 255, 255, 0.92);
+      --surface: #ffffff;
+      --surface-strong: #ffe8f3;
+      --white: #ffffff;
     }
 
     html { scroll-behavior: smooth; }
 
     body {
-      font-family: 'Nunito', sans-serif;
-      background: var(--bubblegum);
-      color: var(--text);
+      font-family: 'Manrope', sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(255, 79, 174, 0.16), transparent 30%),
+        radial-gradient(circle at bottom right, rgba(17, 17, 17, 0.08), transparent 30%),
+        linear-gradient(180deg, #ffffff 0%, #fff5fa 100%);
+      color: var(--ink);
       min-height: 100vh;
       overflow-x: hidden;
     }
 
-    /* ── Floating blobs ── */
     .blob-bg {
-      position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden;
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      overflow: hidden;
     }
+
     .blob {
-      position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.35;
-      animation: drift 12s ease-in-out infinite alternate;
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(90px);
+      opacity: 0.2;
+      animation: drift 14s ease-in-out infinite alternate;
     }
-    .blob-1 { width: 500px; height: 500px; background: var(--pink); top: -120px; left: -100px; animation-duration: 14s; }
-    .blob-2 { width: 400px; height: 400px; background: var(--purple); bottom: -100px; right: -80px; animation-duration: 11s; animation-delay: -4s; }
-    .blob-3 { width: 300px; height: 300px; background: var(--yellow); top: 40%; left: 55%; animation-duration: 16s; animation-delay: -8s; }
+
+    .blob-1 {
+      width: 440px;
+      height: 440px;
+      background: var(--accent);
+      top: -110px;
+      left: -90px;
+      animation-duration: 16s;
+    }
+
+    .blob-2 {
+      width: 360px;
+      height: 360px;
+      background: #111111;
+      bottom: -90px;
+      right: -70px;
+      animation-duration: 12s;
+      animation-delay: -4s;
+    }
+
+    .blob-3 {
+      width: 280px;
+      height: 280px;
+      background: var(--pink-soft);
+      top: 42%;
+      left: 54%;
+      animation-duration: 18s;
+      animation-delay: -7s;
+    }
+
     @keyframes drift {
       from { transform: translate(0, 0) scale(1); }
-      to   { transform: translate(30px, 40px) scale(1.08); }
+      to { transform: translate(28px, 36px) scale(1.06); }
     }
 
-    /* ── Layout ── */
-    .page { position: relative; z-index: 1; max-width: 860px; margin: 0 auto; padding: 40px 24px 80px; }
+    .page {
+      position: relative;
+      z-index: 1;
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 44px 24px 80px;
+    }
 
-    /* ── Hero ── */
-    .hero { text-align: center; padding: 60px 0 40px; }
+    .hero {
+      text-align: center;
+      padding: 60px 0 42px;
+    }
 
     .app-icon {
-      width: 110px; height: 110px; border-radius: 28px;
-      background: linear-gradient(135deg, var(--pink) 0%, var(--purple) 100%);
+      width: 108px;
+      height: 108px;
+      border-radius: 28px;
+      background: linear-gradient(135deg, #111111 0%, var(--accent) 100%);
       margin: 0 auto 24px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 52px;
-      box-shadow: 0 12px 40px rgba(255,79,174,0.45), 0 2px 0 #fff inset;
-      animation: icon-pop 0.6s cubic-bezier(.34,1.56,.64,1) both;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 48px;
+      color: var(--white);
+      box-shadow: 0 14px 40px rgba(255, 79, 174, 0.2), 0 1px 0 rgba(255, 255, 255, 0.4) inset;
+      animation: icon-pop 0.6s cubic-bezier(.34, 1.56, .64, 1) both;
     }
+
     @keyframes icon-pop {
-      from { transform: scale(0.5) rotate(-10deg); opacity: 0; }
-      to   { transform: scale(1) rotate(0deg); opacity: 1; }
+      from { transform: scale(0.6) translateY(8px); opacity: 0; }
+      to { transform: scale(1) translateY(0); opacity: 1; }
     }
 
     .hero h1 {
-      font-family: 'Fredoka One', cursive;
-      font-size: clamp(3rem, 8vw, 5.5rem);
-      letter-spacing: 1px;
-      background: linear-gradient(120deg, var(--pink) 30%, var(--purple));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      line-height: 1;
-      margin-bottom: 10px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(3rem, 8vw, 5rem);
+      letter-spacing: 0.02em;
+      color: var(--ink);
+      line-height: 0.96;
+      margin-bottom: 12px;
       animation: slide-up 0.5s 0.1s ease both;
     }
+
     .hero .tagline {
-      font-size: 1.2rem;
-      color: var(--subtext);
-      font-weight: 700;
-      margin-bottom: 36px;
+      max-width: 520px;
+      margin: 0 auto 34px;
+      font-size: 1.08rem;
+      color: var(--ink-soft);
+      font-weight: 600;
+      line-height: 1.6;
       animation: slide-up 0.5s 0.2s ease both;
     }
+
     @keyframes slide-up {
       from { transform: translateY(24px); opacity: 0; }
-      to   { transform: translateY(0); opacity: 1; }
+      to { transform: translateY(0); opacity: 1; }
     }
 
-    /* ── Download button ── */
-    .dl-wrap { display: flex; justify-content: center; gap: 14px; flex-wrap: wrap; margin-bottom: 18px; animation: slide-up 0.5s 0.3s ease both; }
+    .dl-wrap {
+      display: flex;
+      justify-content: center;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-bottom: 18px;
+      animation: slide-up 0.5s 0.3s ease both;
+    }
 
     .btn-download {
-      display: inline-flex; align-items: center; gap: 12px;
-      background: linear-gradient(135deg, var(--pink) 0%, var(--pink-deep) 100%);
-      color: #fff;
-      font-family: 'Fredoka One', cursive;
-      font-size: 1.35rem;
-      letter-spacing: 0.5px;
-      padding: 18px 38px;
-      border-radius: 60px;
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      background: linear-gradient(135deg, #111111 0%, var(--accent-strong) 100%);
+      color: var(--white);
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      padding: 18px 34px;
+      border-radius: 999px;
       text-decoration: none;
-      box-shadow: 0 8px 30px rgba(255,79,174,0.45), 0 2px 0 rgba(255,255,255,0.25) inset;
-      transition: transform 0.18s, box-shadow 0.18s;
+      box-shadow: 0 10px 28px rgba(17, 17, 17, 0.18), 0 0 0 1px rgba(255, 79, 174, 0.18);
+      transition: transform 0.18s ease, box-shadow 0.18s ease;
       cursor: pointer;
       border: none;
     }
+
     .btn-download:hover {
-      transform: translateY(-4px) scale(1.03);
-      box-shadow: 0 16px 40px rgba(255,79,174,0.55), 0 2px 0 rgba(255,255,255,0.25) inset;
+      transform: translateY(-3px);
+      box-shadow: 0 16px 32px rgba(17, 17, 17, 0.22), 0 0 0 1px rgba(255, 79, 174, 0.32);
     }
-    .btn-download:active { transform: scale(0.97); }
+
+    .btn-download:active { transform: scale(0.98); }
     .btn-download svg { flex-shrink: 0; }
 
-    .dl-note { font-size: 0.82rem; color: var(--subtext); font-weight: 600; animation: slide-up 0.5s 0.35s ease both; }
-    .dl-note span { background: var(--pink-pale); border-radius: 20px; padding: 3px 10px; }
-
-    /* ── Bouncing hearts ── */
-    .hearts { font-size: 1.4rem; letter-spacing: 6px; margin: 30px 0 0; animation: slide-up 0.5s 0.4s ease both; }
-    .hearts span { display: inline-block; animation: bounce-h 1.2s ease-in-out infinite; }
-    .hearts span:nth-child(2) { animation-delay: 0.15s; }
-    .hearts span:nth-child(3) { animation-delay: 0.3s; }
-    @keyframes bounce-h {
-      0%,100% { transform: translateY(0); }
-      50%      { transform: translateY(-8px); }
+    .dl-note {
+      font-size: 0.84rem;
+      color: var(--ink-soft);
+      font-weight: 600;
+      animation: slide-up 0.5s 0.35s ease both;
     }
 
-    /* ── Features grid ── */
+    .dl-note span {
+      display: inline-block;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: var(--pink-mist);
+      border: 1px solid var(--line);
+    }
+
     .section-title {
-      font-family: 'Fredoka One', cursive;
-      font-size: 2rem;
-      color: var(--pink-deep);
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.9rem;
+      letter-spacing: 0.01em;
+      color: var(--ink);
       text-align: center;
       margin: 60px 0 28px;
     }
@@ -145,28 +210,51 @@
     }
 
     .feat {
-      background: rgba(255,255,255,0.72);
+      background: var(--panel);
       backdrop-filter: blur(12px);
-      border: 2px solid rgba(255,79,174,0.18);
+      border: 1px solid var(--line);
       border-radius: 20px;
       padding: 22px 20px;
-      display: flex; align-items: flex-start; gap: 14px;
-      transition: transform 0.2s, box-shadow 0.2s;
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
       animation: slide-up 0.5s ease both;
+      box-shadow: 0 8px 24px rgba(17, 17, 17, 0.05);
     }
-    .feat:hover { transform: translateY(-5px); box-shadow: 0 12px 32px rgba(255,79,174,0.18); }
+
+    .feat:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 14px 28px rgba(17, 17, 17, 0.08);
+      border-color: rgba(255, 79, 174, 0.35);
+    }
 
     .feat-icon {
-      font-size: 1.8rem; flex-shrink: 0;
-      width: 46px; height: 46px;
-      background: var(--pink-pale);
+      font-size: 1.35rem;
+      flex-shrink: 0;
+      width: 46px;
+      height: 46px;
+      background: var(--surface-strong);
+      border: 1px solid rgba(255, 79, 174, 0.18);
       border-radius: 14px;
-      display: flex; align-items: center; justify-content: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
-    .feat-text h3 { font-size: 0.95rem; font-weight: 800; color: var(--text); margin-bottom: 3px; }
-    .feat-text p  { font-size: 0.82rem; color: var(--subtext); line-height: 1.5; }
 
-    /* staggered feature animation delays */
+    .feat-text h3 {
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: var(--ink);
+      margin-bottom: 4px;
+    }
+
+    .feat-text p {
+      font-size: 0.82rem;
+      color: var(--ink-soft);
+      line-height: 1.55;
+    }
+
     .feat:nth-child(1)  { animation-delay: 0.05s; }
     .feat:nth-child(2)  { animation-delay: 0.10s; }
     .feat:nth-child(3)  { animation-delay: 0.15s; }
@@ -180,237 +268,215 @@
     .feat:nth-child(11) { animation-delay: 0.55s; }
     .feat:nth-child(12) { animation-delay: 0.60s; }
 
-    /* ── Install steps ── */
     .steps { margin-top: 60px; }
-    .steps-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 14px; }
+
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+      gap: 14px;
+    }
 
     .step {
-      background: linear-gradient(145deg, rgba(255,255,255,0.8), rgba(255,214,238,0.5));
+      background: linear-gradient(145deg, rgba(255, 255, 255, 0.96), rgba(255, 232, 243, 0.88));
       border-radius: 18px;
       padding: 20px 18px;
       text-align: center;
-      border: 2px solid rgba(255,79,174,0.15);
+      border: 1px solid var(--line);
       position: relative;
+      box-shadow: 0 8px 24px rgba(17, 17, 17, 0.05);
     }
-    .step-num {
-      font-family: 'Fredoka One', cursive;
-      font-size: 2.5rem;
-      color: var(--pink-pale);
-      line-height: 1;
-      margin-bottom: 6px;
-      -webkit-text-stroke: 2px var(--pink);
-    }
-    .step h3 { font-size: 0.9rem; font-weight: 800; margin-bottom: 4px; }
-    .step p  { font-size: 0.8rem; color: var(--subtext); line-height: 1.5; }
 
-    /* ── Footer ── */
+    .step-num {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 2.4rem;
+      color: var(--surface-strong);
+      line-height: 1;
+      margin-bottom: 8px;
+      -webkit-text-stroke: 1px var(--accent-strong);
+    }
+
+    .step h3 {
+      font-size: 0.92rem;
+      font-weight: 800;
+      margin-bottom: 5px;
+      color: var(--ink);
+    }
+
+    .step p {
+      font-size: 0.8rem;
+      color: var(--ink-soft);
+      line-height: 1.55;
+    }
+
     footer {
       text-align: center;
       margin-top: 70px;
-      padding-top: 30px;
-      border-top: 2px dashed rgba(255,79,174,0.25);
+      padding-top: 28px;
+      border-top: 1px solid var(--line);
       font-size: 0.85rem;
-      color: var(--subtext);
+      color: var(--ink-soft);
       font-weight: 600;
     }
-    footer a { color: var(--pink); text-decoration: none; }
+
+    footer a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
     footer a:hover { text-decoration: underline; }
 
-    /* ── Confetti pop on download ── */
-    .confetti-piece {
-      position: fixed;
-      width: 10px; height: 10px;
-      border-radius: 2px;
-      pointer-events: none;
-      animation: confetti-fall 1.2s ease-in forwards;
-      z-index: 9999;
-    }
-    @keyframes confetti-fall {
-      0%   { transform: translateY(0) rotate(0deg); opacity: 1; }
-      100% { transform: translateY(300px) rotate(720deg); opacity: 0; }
+    @media (max-width: 640px) {
+      .page { padding: 32px 18px 64px; }
+      .hero { padding-top: 42px; }
+      .btn-download { width: 100%; justify-content: center; }
     }
   </style>
 </head>
 <body>
-
-<div class="blob-bg">
-  <div class="blob blob-1"></div>
-  <div class="blob blob-2"></div>
-  <div class="blob blob-3"></div>
-</div>
-
-<div class="page">
-
-  <!-- Hero -->
-  <div class="hero">
-    <div class="app-icon">💬</div>
-    <h1>Tubonge</h1>
-    <p class="tagline">Chat. Connect. Belong. 🌸</p>
-
-    <div class="dl-wrap">
-      <a class="btn-download" href="tubonge.apk" download id="dlBtn">
-        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-          <polyline points="7 10 12 15 17 10"/>
-          <line x1="12" y1="15" x2="12" y2="3"/>
-        </svg>
-        Download APK
-      </a>
-    </div>
-    <p class="dl-note"><span>🤖 Android only &nbsp;·&nbsp; Free forever</span></p>
-
-    <div class="hearts">
-      <span>💗</span><span>💕</span><span>💖</span>
-    </div>
+  <div class="blob-bg">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
   </div>
 
-  <!-- Features -->
-  <h2 class="section-title">✨ What's Inside</h2>
-  <div class="features">
-    <div class="feat">
-      <div class="feat-icon">👥</div>
-      <div class="feat-text">
-        <h3>Group Chat</h3>
-        <p>Realtime group messaging with replies, image sharing, and voice messages.</p>
+  <div class="page">
+    <div class="hero">
+      <div class="app-icon">TC</div>
+      <h1>Tubonge</h1>
+      <p class="tagline">A cleaner way to stay connected with group conversations, private messages, and fast mobile sharing.</p>
+
+      <div class="dl-wrap">
+        <a class="btn-download" href="tubonge.apk" download id="dlBtn">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+            <polyline points="7 10 12 15 17 10" />
+            <line x1="12" y1="15" x2="12" y2="3" />
+          </svg>
+          Download APK
+        </a>
+      </div>
+
+      <p class="dl-note"><span>Android only - Free to use</span></p>
+    </div>
+
+    <h2 class="section-title">What You Get</h2>
+    <div class="features">
+      <div class="feat">
+        <div class="feat-icon">GC</div>
+        <div class="feat-text">
+          <h3>Group Chat</h3>
+          <p>Realtime group messaging with replies, image sharing, and voice messages.</p>
+        </div>
+      </div>
+      <div class="feat">
+        <div class="feat-icon">DM</div>
+        <div class="feat-text">
+          <h3>Private DMs</h3>
+          <p>1-on-1 private threads with unread badges and per-thread highlighting.</p>
+        </div>
+      </div>
+      <div class="feat">
+        <div class="feat-icon">OK</div>
+        <div class="feat-text">
+          <h3>Read Receipts</h3>
+          <p>See sent and read status on every private message you send.</p>
+        </div>
+      </div>
+      <div class="feat">
+        <div class="feat-icon">ON</div>
+        <div class="feat-text">
+          <h3>Online Presence</h3>
+          <p>Live online and offline badges with a current view of active users.</p>
+        </div>
+      </div>
+      <div class="feat">
+        <div class="feat-icon">VM</div>
+        <div class="feat-text">
+          <h3>Voice Messages</h3>
+          <p>Record up to 15-second voice notes with a timer and playback indicator.</p>
+        </div>
+      </div>
+      <div class="feat">
+        <div class="feat-icon">IM</div>
+        <div class="feat-text">
+          <h3>Image Sharing</h3>
+          <p>Send images in group and private chats with smooth upload progress.</p>
+        </div>
+      </div>
+      <div class="feat">
+        <div class="feat-icon">RP</div>
+        <div class="feat-text">
+          <h3>Message Replies</h3>
+          <p>Reply to any group message with a preview and inline reply block.</p>
+        </div>
+      </div>
+      <div class="feat">
+        <div class="feat-icon">PF</div>
+        <div class="feat-text">
+          <h3>Profile Editor</h3>
+          <p>Set your display name, bio, and choose a custom avatar.</p>
+        </div>
+      </div>
+      <div class="feat">
+        <div class="feat-icon">SL</div>
+        <div class="feat-text">
+          <h3>Secure Login</h3>
+          <p>Username and password sign-up with persistent session support.</p>
+        </div>
+      </div>
+      <div class="feat">
+        <div class="feat-icon">AD</div>
+        <div class="feat-text">
+          <h3>Admin Console</h3>
+          <p>Admin access with tools for moderating and managing group activity.</p>
+        </div>
+      </div>
+      <div class="feat">
+        <div class="feat-icon">MB</div>
+        <div class="feat-text">
+          <h3>Mobile Optimized</h3>
+          <p>Responsive layout, sticky composer, and keyboard-aware behavior on mobile.</p>
+        </div>
+      </div>
+      <div class="feat">
+        <div class="feat-icon">AC</div>
+        <div class="feat-text">
+          <h3>Accent Colors</h3>
+          <p>Per-user color accents on message avatars to keep conversations easy to scan.</p>
+        </div>
       </div>
     </div>
-    <div class="feat">
-      <div class="feat-icon">💌</div>
-      <div class="feat-text">
-        <h3>Private DMs</h3>
-        <p>1-on-1 private threads with unread badges and per-thread highlighting.</p>
+
+    <div class="steps">
+      <h2 class="section-title">Installation</h2>
+      <div class="steps-grid">
+        <div class="step">
+          <div class="step-num">1</div>
+          <h3>Download</h3>
+          <p>Use the download button above to get the APK file.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <h3>Allow Installs</h3>
+          <p>Open <strong>Settings &gt; Security</strong> and allow app installs from your browser.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <h3>Open the APK</h3>
+          <p>Find <strong>tubonge.apk</strong> in your Downloads folder and open it.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">4</div>
+          <h3>Install</h3>
+          <p>Complete the install, open Tubonge, and sign in to start chatting.</p>
+        </div>
       </div>
     </div>
-    <div class="feat">
-      <div class="feat-icon">✅</div>
-      <div class="feat-text">
-        <h3>Read Receipts</h3>
-        <p>See Sent & Read status on every private message you send.</p>
-      </div>
-    </div>
-    <div class="feat">
-      <div class="feat-icon">🟢</div>
-      <div class="feat-text">
-        <h3>Online Presence</h3>
-        <p>Live online/offline badges and a live count of who's active right now.</p>
-      </div>
-    </div>
-    <div class="feat">
-      <div class="feat-icon">🎙️</div>
-      <div class="feat-text">
-        <h3>Voice Messages</h3>
-        <p>Record up to 15s voice notes with a recording timer and waveform indicator.</p>
-      </div>
-    </div>
-    <div class="feat">
-      <div class="feat-icon">🖼️</div>
-      <div class="feat-text">
-        <h3>Image Sharing</h3>
-        <p>Send images in group & private chats with smooth upload progress.</p>
-      </div>
-    </div>
-    <div class="feat">
-      <div class="feat-icon">↩️</div>
-      <div class="feat-text">
-        <h3>Message Replies</h3>
-        <p>Reply to any group message with a preview and inline reply block.</p>
-      </div>
-    </div>
-    <div class="feat">
-      <div class="feat-icon">🪪</div>
-      <div class="feat-text">
-        <h3>Profile Editor</h3>
-        <p>Set your display name, bio, and pick a custom avatar.</p>
-      </div>
-    </div>
-    <div class="feat">
-      <div class="feat-icon">🔐</div>
-      <div class="feat-text">
-        <h3>Secure Login</h3>
-        <p>Username + password sign-up with persistent session support.</p>
-      </div>
-    </div>
-    <div class="feat">
-      <div class="feat-icon">🛠️</div>
-      <div class="feat-text">
-        <h3>Admin Console</h3>
-        <p>Admin login path with a full console for managing group messages.</p>
-      </div>
-    </div>
-    <div class="feat">
-      <div class="feat-icon">📱</div>
-      <div class="feat-text">
-        <h3>Mobile Optimized</h3>
-        <p>Glassmorphism UI, sticky composer, and keyboard-aware layout on mobile.</p>
-      </div>
-    </div>
-    <div class="feat">
-      <div class="feat-icon">🎨</div>
-      <div class="feat-text">
-        <h3>Accent Colors</h3>
-        <p>Per-user accent colors on message avatars so you always know who's talking.</p>
-      </div>
-    </div>
+
+    <footer>
+      <p>Tubonge v1.0 - <a href="tubonge.apk" download>Download APK</a></p>
+      <p style="margin-top: 6px; opacity: 0.78;">Android package for direct install</p>
+    </footer>
   </div>
-
-  <!-- Install steps -->
-  <div class="steps">
-    <h2 class="section-title">📲 How to Install</h2>
-    <div class="steps-grid">
-      <div class="step">
-        <div class="step-num">1</div>
-        <h3>Download</h3>
-        <p>Tap the big pink button above to grab the APK file.</p>
-      </div>
-      <div class="step">
-        <div class="step-num">2</div>
-        <h3>Allow Unknown Apps</h3>
-        <p>Go to <strong>Settings → Security</strong> and enable <em>Install unknown apps</em> for your browser.</p>
-      </div>
-      <div class="step">
-        <div class="step-num">3</div>
-        <h3>Open the APK</h3>
-        <p>Find <strong>tubonge.apk</strong> in your Downloads folder and tap it.</p>
-      </div>
-      <div class="step">
-        <div class="step-num">4</div>
-        <h3>Install & Chat!</h3>
-        <p>Hit Install, open Tubonge, sign up, and start chatting. 💬</p>
-      </div>
-    </div>
-  </div>
-
-  <!-- Footer -->
-  <footer>
-    <p>Made with 💖 · Tubonge v1.0 · <a href="tubonge.apk" download>Download APK</a></p>
-    <p style="margin-top:6px; opacity:0.7;">Free & open source on GitHub</p>
-  </footer>
-
-</div>
-
-<script>
-  // Confetti burst on download click
-  const colors = ['#FF4FAE','#FF85C8','#B04FD8','#FFE066','#fff','#C2185B'];
-  document.getElementById('dlBtn').addEventListener('click', () => {
-    for (let i = 0; i < 60; i++) {
-      const el = document.createElement('div');
-      el.className = 'confetti-piece';
-      el.style.cssText = `
-        left: ${40 + Math.random() * 20}%;
-        top: ${20 + Math.random() * 10}%;
-        background: ${colors[Math.floor(Math.random() * colors.length)]};
-        transform: rotate(${Math.random()*360}deg);
-        animation-delay: ${Math.random() * 0.4}s;
-        animation-duration: ${0.8 + Math.random() * 0.8}s;
-        width: ${6 + Math.random()*10}px;
-        height: ${6 + Math.random()*10}px;
-        border-radius: ${Math.random() > 0.5 ? '50%' : '2px'};
-        margin-left: ${(Math.random()-0.5)*300}px;
-      `;
-      document.body.appendChild(el);
-      setTimeout(() => el.remove(), 2000);
-    }
-  });
-</script>
 </body>
 </html>
