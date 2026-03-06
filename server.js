@@ -237,7 +237,10 @@ const server = http.createServer(async (request, response) => {
       return;
     }
 
-    if (request.method === "GET" && url.pathname === "/download/tubonge.apk") {
+    if (
+      request.method === "GET" &&
+      (url.pathname === "/download/tubonge.apk" || url.pathname === "/tubonge.apk")
+    ) {
       await handleDownload(response);
       return;
     }

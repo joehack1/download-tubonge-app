@@ -1,6 +1,99 @@
 const downloadButton = document.getElementById("dlBtn");
 const ratingForm = document.getElementById("ratingForm");
 const ratingStatus = document.getElementById("ratingStatus");
+const LOCAL_STORE_KEY = "tubonge-site-data";
+
+let hasRemoteApi = null;
+
+function resolveRelativeUrl(relativePath) {
+  return new URL(relativePath, window.location.href).toString();
+}
+
+function normalizeStore(store = {}) {
+  return {
+    downloads: Array.isArray(store.downloads) ? store.downloads : [],
+    ratings: Array.isArray(store.ratings) ? store.ratings : [],
+  };
+}
+
+function readLocalStore() {
+  try {
+    const raw = window.localStorage.getItem(LOCAL_STORE_KEY);
+    return normalizeStore(raw ? JSON.parse(raw) : {});
+  } catch {
+    return normalizeStore();
+  }
+}
+
+function writeLocalStore(store) {
+  try {
+    window.localStorage.setItem(LOCAL_STORE_KEY, JSON.stringify(normalizeStore(store)));
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+function createEntryId(prefix) {
+  if (window.crypto && typeof window.crypto.randomUUID === "function") {
+    return window.crypto.randomUUID();
+  }
+
+  return `${prefix}-${Date.now()}-${Math.random().toString(16).slice(2)}`;
+}
+
+function summarizeStore(store) {
+  const normalizedStore = normalizeStore(store);
+  const ratings = [...normalizedStore.ratings].sort((a, b) => b.timestamp.localeCompare(a.timestamp));
+  const recentRatings = ratings.slice(0, 6);
+  const recentDownloads = [...normalizedStore.downloads]
+    .sort((a, b) => b.timestamp.localeCompare(a.timestamp))
+    .slice(0, 8);
+  const ratingCount = ratings.length;
+  const ratingTotal = ratings.reduce((sum, entry) => sum + Number(entry.stars || 0), 0);
+  const averageRating = ratingCount ? Number((ratingTotal / ratingCount).toFixed(1)) : 0;
+
+  return {
+    downloadCount: normalizedStore.downloads.length,
+    ratingCount,
+    averageRating,
+    recentDownloads,
+    recentRatings,
+  };
+}
+
+function saveRatingLocally({ stars, name, comment }) {
+  const store = readLocalStore();
+
+  store.ratings.push({
+    id: createEntryId("rating"),
+    stars,
+    name,
+    comment,
+    timestamp: new Date().toISOString(),
+  });
+
+  if (!writeLocalStore(store)) {
+    throw new Error("Could not save rating on this device.");
+  }
+
+  return summarizeStore(store);
+}
+
+function recordDownloadLocally() {
+  const store = readLocalStore();
+
+  store.downloads.push({
+    id: createEntryId("download"),
+    timestamp: new Date().toISOString(),
+  });
+
+  if (!writeLocalStore(store)) {
+    return null;
+  }
+
+  return summarizeStore(store);
+}
 
 function setTextForAll(selector, value) {
   document.querySelectorAll(selector).forEach((node) => {
@@ -106,33 +199,73 @@ function renderRatings(entries) {
   });
 }
 
+function renderStats(stats) {
+  const average = formatRatingValue(stats.averageRating);
+  const downloadsLabel = `${stats.downloadCount} total`;
+  const summary = stats.ratingCount
+    ? `${stats.ratingCount} rating${stats.ratingCount === 1 ? "" : "s"} submitted so far.`
+    : "Be the first person to rate Tubonge.";
+
+  setTextForAll("[data-download-count]", String(stats.downloadCount));
+  setTextForAll("[data-rating-count]", String(stats.ratingCount));
+  setTextForAll("[data-average-rating]", average);
+  setTextForAll("[data-rating-summary]", summary);
+
+  document.querySelectorAll(".pill[data-download-count]").forEach((node) => {
+    node.textContent = downloadsLabel;
+  });
+
+  renderDownloads(stats.recentDownloads || []);
+  renderRatings(stats.recentRatings || []);
+}
+
+function isJsonResponse(response) {
+  const contentType = response.headers.get("content-type") || "";
+  return contentType.toLowerCase().includes("application/json");
+}
+
+async function requestJson(relativePath, options = {}) {
+  const response = await fetch(resolveRelativeUrl(relativePath), options);
+
+  if (!isJsonResponse(response)) {
+    const error = new Error("This page is not connected to the rating API.");
+    error.code = "NON_JSON_RESPONSE";
+    error.status = response.status;
+    throw error;
+  }
+
+  const payload = await response.json();
+  hasRemoteApi = true;
+
+  if (!response.ok) {
+    const error = new Error(payload.error || "Request failed.");
+    error.code = "API_ERROR";
+    error.status = response.status;
+    throw error;
+  }
+
+  return payload;
+}
+
+function shouldUseLocalFallback(error) {
+  return error instanceof TypeError || error?.code === "NON_JSON_RESPONSE";
+}
+
+function renderLocalStats() {
+  hasRemoteApi = false;
+  renderStats(summarizeStore(readLocalStore()));
+}
+
 async function loadStats() {
   try {
-    const response = await fetch("/api/stats", { headers: { Accept: "application/json" } });
-
-    if (!response.ok) {
-      throw new Error("Could not load stats.");
+    const stats = await requestJson("api/stats", { headers: { Accept: "application/json" } });
+    renderStats(stats);
+  } catch (error) {
+    if (shouldUseLocalFallback(error)) {
+      renderLocalStats();
+      return;
     }
 
-    const stats = await response.json();
-    const average = formatRatingValue(stats.averageRating);
-    const downloadsLabel = `${stats.downloadCount} total`;
-    const summary = stats.ratingCount
-      ? `${stats.ratingCount} rating${stats.ratingCount === 1 ? "" : "s"} submitted so far.`
-      : "Be the first person to rate Tubonge.";
-
-    setTextForAll("[data-download-count]", String(stats.downloadCount));
-    setTextForAll("[data-rating-count]", String(stats.ratingCount));
-    setTextForAll("[data-average-rating]", average);
-    setTextForAll("[data-rating-summary]", summary);
-
-    document.querySelectorAll(".pill[data-download-count]").forEach((node) => {
-      node.textContent = downloadsLabel;
-    });
-
-    renderDownloads(stats.recentDownloads || []);
-    renderRatings(stats.recentRatings || []);
-  } catch (error) {
     renderDownloads([]);
     renderRatings([]);
     setTextForAll("[data-rating-summary]", "Live stats are unavailable right now.");
@@ -172,7 +305,7 @@ async function submitRating(event) {
   setRatingMessage("Saving rating...");
 
   try {
-    const response = await fetch("/api/ratings", {
+    await requestJson("api/ratings", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -181,16 +314,24 @@ async function submitRating(event) {
       body: JSON.stringify({ stars, name, comment }),
     });
 
-    const payload = await response.json();
-
-    if (!response.ok) {
-      throw new Error(payload.error || "Could not save rating.");
-    }
-
     ratingForm.reset();
     setRatingMessage("Rating saved.", "is-success");
     await loadStats();
   } catch (error) {
+    if (shouldUseLocalFallback(error)) {
+      try {
+        saveRatingLocally({ stars, name, comment });
+        hasRemoteApi = false;
+        ratingForm.reset();
+        setRatingMessage("Rating saved on this device.", "is-success");
+        renderLocalStats();
+      } catch (localError) {
+        setRatingMessage(localError.message, "is-error");
+      }
+
+      return;
+    }
+
     setRatingMessage(error.message, "is-error");
   }
 }
@@ -203,8 +344,12 @@ function setUpDownloadRedirect() {
   downloadButton.addEventListener("click", () => {
     downloadButton.classList.add("is-busy");
 
+    if (hasRemoteApi === false) {
+      recordDownloadLocally();
+    }
+
     window.setTimeout(() => {
-      window.location.assign("/thank-you.html");
+      window.location.assign(resolveRelativeUrl("thank-you.html"));
     }, 900);
   });
 }
