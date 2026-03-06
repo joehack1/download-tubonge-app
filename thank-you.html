@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Thank You - Tubonge</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="blob-bg" aria-hidden="true">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+  </div>
+
+  <main class="page">
+    <section class="hero">
+      <div class="hero-brand">
+        <img class="hero-logo" src="logo2.png" alt="Tubonge logo" loading="eager" decoding="async" />
+      </div>
+      <h1 class="page-title">Thank You</h1>
+      <p class="tagline">Your download should already be running. Install the APK, open Tubonge, and then leave a rating when you are ready.</p>
+
+      <div class="dl-wrap">
+        <a class="btn-download" href="/download/tubonge.apk" download id="dlBtn">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+            <polyline points="7 10 12 15 17 10" />
+            <line x1="12" y1="15" x2="12" y2="3" />
+          </svg>
+          Download Again
+        </a>
+        <a class="btn-secondary" href="/index.html">Back to Home</a>
+      </div>
+
+      <div class="hero-metrics">
+        <article class="metric-card compact">
+          <span class="metric-label">Downloads</span>
+          <strong class="metric-value" data-download-count>0</strong>
+        </article>
+        <article class="metric-card compact">
+          <span class="metric-label">Average Rating</span>
+          <strong class="metric-value"><span data-average-rating>0.0</span> / 5</strong>
+        </article>
+        <article class="metric-card compact">
+          <span class="metric-label">Ratings</span>
+          <strong class="metric-value" data-rating-count>0</strong>
+        </article>
+      </div>
+    </section>
+
+    <section aria-labelledby="next-steps-title">
+      <h2 class="section-title" id="next-steps-title">Next Steps</h2>
+      <div class="steps-grid">
+        <article class="step">
+          <div class="step-num">1</div>
+          <h3>Open the File</h3>
+          <p>Find <strong>tubonge.apk</strong> in your Downloads folder and start the installer.</p>
+        </article>
+        <article class="step">
+          <div class="step-num">2</div>
+          <h3>Allow Install</h3>
+          <p>If Android asks, allow installs from your browser or file manager.</p>
+        </article>
+        <article class="step">
+          <div class="step-num">3</div>
+          <h3>Launch Tubonge</h3>
+          <p>Open the app, sign in, and test the messaging flow.</p>
+        </article>
+        <article class="step">
+          <div class="step-num">4</div>
+          <h3>Leave a Rating</h3>
+          <p>Come back to this page and submit a quick rating once you have used it.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="rating-section" aria-labelledby="rate-now-title">
+      <h2 class="section-title" id="rate-now-title">Leave a Rating</h2>
+      <div class="rating-grid">
+        <article class="panel-card">
+          <div class="panel-head">
+            <div>
+              <h3>Tell Us How It Went</h3>
+              <p>Short comments are enough. Ratings are shown live on the site.</p>
+            </div>
+          </div>
+
+          <form class="rating-form" id="ratingForm">
+            <fieldset class="rating-stars">
+              <legend>Choose a rating</legend>
+              <div class="star-row">
+                <div class="star-option">
+                  <input type="radio" id="thanks-star5" name="stars" value="5" />
+                  <label for="thanks-star5">5</label>
+                </div>
+                <div class="star-option">
+                  <input type="radio" id="thanks-star4" name="stars" value="4" />
+                  <label for="thanks-star4">4</label>
+                </div>
+                <div class="star-option">
+                  <input type="radio" id="thanks-star3" name="stars" value="3" />
+                  <label for="thanks-star3">3</label>
+                </div>
+                <div class="star-option">
+                  <input type="radio" id="thanks-star2" name="stars" value="2" />
+                  <label for="thanks-star2">2</label>
+                </div>
+                <div class="star-option">
+                  <input type="radio" id="thanks-star1" name="stars" value="1" />
+                  <label for="thanks-star1">1</label>
+                </div>
+              </div>
+            </fieldset>
+
+            <label class="field">
+              <span>Name</span>
+              <input type="text" name="name" maxlength="40" placeholder="Optional" />
+            </label>
+
+            <label class="field">
+              <span>Comment</span>
+              <textarea name="comment" rows="4" maxlength="240" placeholder="How was the install or app experience?"></textarea>
+            </label>
+
+            <div class="form-actions">
+              <button class="btn-secondary solid" type="submit">Submit Rating</button>
+              <p class="form-status" id="ratingStatus" aria-live="polite"></p>
+            </div>
+          </form>
+        </article>
+
+        <article class="panel-card">
+          <div class="panel-head">
+            <div>
+              <h3>Recent Ratings</h3>
+              <p data-rating-summary>Be the first person to rate Tubonge.</p>
+            </div>
+            <span class="pill"><span data-average-rating>0.0</span> / 5</span>
+          </div>
+          <ul class="review-list" data-rating-list>
+            <li class="empty-state">No ratings submitted yet.</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section aria-labelledby="download-log-title">
+      <h2 class="section-title" id="download-log-title">Recent Downloads</h2>
+      <article class="panel-card">
+        <div class="panel-head">
+          <div>
+            <h3>Download Log</h3>
+            <p>Recent APK downloads recorded by the server.</p>
+          </div>
+          <span class="pill" data-download-count>0 total</span>
+        </div>
+        <ul class="activity-list" data-download-list>
+          <li class="empty-state">No downloads recorded yet.</li>
+        </ul>
+      </article>
+    </section>
+
+    <footer>
+      <p>Tubonge v1.0 - <a href="/index.html">Back to home page</a></p>
+      <p class="footer-note">Downloads and ratings persist in the local JSON data store.</p>
+    </footer>
+  </main>
+
+  <script src="app.js" defer></script>
+</body>
+</html>

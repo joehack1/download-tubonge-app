@@ -4,354 +4,28 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Tubonge - Chat App</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet" />
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    :root {
-      --ink: #111111;
-      --ink-soft: #4e4e4e;
-      --accent: #ff4fae;
-      --accent-strong: #b81e6c;
-      --pink-soft: #ffd8ea;
-      --pink-mist: #fff2f8;
-      --line: rgba(17, 17, 17, 0.12);
-      --panel: rgba(255, 255, 255, 0.92);
-      --surface: #ffffff;
-      --surface-strong: #ffe8f3;
-      --white: #ffffff;
-    }
-
-    html { scroll-behavior: smooth; }
-
-    body {
-      font-family: 'Manrope', sans-serif;
-      background:
-        radial-gradient(circle at top left, rgba(255, 79, 174, 0.16), transparent 30%),
-        radial-gradient(circle at bottom right, rgba(17, 17, 17, 0.08), transparent 30%),
-        linear-gradient(180deg, #ffffff 0%, #fff5fa 100%);
-      color: var(--ink);
-      min-height: 100vh;
-      overflow-x: hidden;
-    }
-
-    .blob-bg {
-      position: fixed;
-      inset: 0;
-      z-index: 0;
-      pointer-events: none;
-      overflow: hidden;
-    }
-
-    .blob {
-      position: absolute;
-      border-radius: 50%;
-      filter: blur(90px);
-      opacity: 0.2;
-      animation: drift 14s ease-in-out infinite alternate;
-    }
-
-    .blob-1 {
-      width: 440px;
-      height: 440px;
-      background: var(--accent);
-      top: -110px;
-      left: -90px;
-      animation-duration: 16s;
-    }
-
-    .blob-2 {
-      width: 360px;
-      height: 360px;
-      background: #111111;
-      bottom: -90px;
-      right: -70px;
-      animation-duration: 12s;
-      animation-delay: -4s;
-    }
-
-    .blob-3 {
-      width: 280px;
-      height: 280px;
-      background: var(--pink-soft);
-      top: 42%;
-      left: 54%;
-      animation-duration: 18s;
-      animation-delay: -7s;
-    }
-
-    @keyframes drift {
-      from { transform: translate(0, 0) scale(1); }
-      to { transform: translate(28px, 36px) scale(1.06); }
-    }
-
-    .page {
-      position: relative;
-      z-index: 1;
-      max-width: 860px;
-      margin: 0 auto;
-      padding: 44px 24px 80px;
-    }
-
-    .hero {
-      text-align: center;
-      padding: 60px 0 42px;
-    }
-
-    .hero-logo {
-      display: block;
-      width: min(460px, 88vw);
-      margin: 0 auto 20px;
-      filter: drop-shadow(0 16px 30px rgba(255, 79, 174, 0.16));
-      animation: icon-pop 0.6s cubic-bezier(.34, 1.56, .64, 1) both;
-    }
-
-    @keyframes icon-pop {
-      from { transform: scale(0.6) translateY(8px); opacity: 0; }
-      to { transform: scale(1) translateY(0); opacity: 1; }
-    }
-
-    .sr-only {
-      position: absolute;
-      width: 1px;
-      height: 1px;
-      padding: 0;
-      margin: -1px;
-      overflow: hidden;
-      clip: rect(0, 0, 0, 0);
-      white-space: nowrap;
-      border: 0;
-    }
-
-    .hero h1 {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: clamp(3rem, 8vw, 5rem);
-      letter-spacing: 0.02em;
-      color: var(--ink);
-      line-height: 0.96;
-      margin-bottom: 12px;
-      animation: slide-up 0.5s 0.1s ease both;
-    }
-
-    .hero .tagline {
-      max-width: 520px;
-      margin: 0 auto 34px;
-      font-size: 1.08rem;
-      color: var(--ink-soft);
-      font-weight: 600;
-      line-height: 1.6;
-      animation: slide-up 0.5s 0.2s ease both;
-    }
-
-    @keyframes slide-up {
-      from { transform: translateY(24px); opacity: 0; }
-      to { transform: translateY(0); opacity: 1; }
-    }
-
-    .dl-wrap {
-      display: flex;
-      justify-content: center;
-      gap: 14px;
-      flex-wrap: wrap;
-      margin-bottom: 18px;
-      animation: slide-up 0.5s 0.3s ease both;
-    }
-
-    .btn-download {
-      display: inline-flex;
-      align-items: center;
-      gap: 12px;
-      background: linear-gradient(135deg, #111111 0%, var(--accent-strong) 100%);
-      color: var(--white);
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 1.1rem;
-      font-weight: 700;
-      letter-spacing: 0.02em;
-      padding: 18px 34px;
-      border-radius: 999px;
-      text-decoration: none;
-      box-shadow: 0 10px 28px rgba(17, 17, 17, 0.18), 0 0 0 1px rgba(255, 79, 174, 0.18);
-      transition: transform 0.18s ease, box-shadow 0.18s ease;
-      cursor: pointer;
-      border: none;
-    }
-
-    .btn-download:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 16px 32px rgba(17, 17, 17, 0.22), 0 0 0 1px rgba(255, 79, 174, 0.32);
-    }
-
-    .btn-download:active { transform: scale(0.98); }
-    .btn-download svg { flex-shrink: 0; }
-
-    .dl-note {
-      font-size: 0.84rem;
-      color: var(--ink-soft);
-      font-weight: 600;
-      animation: slide-up 0.5s 0.35s ease both;
-    }
-
-    .dl-note span {
-      display: inline-block;
-      padding: 6px 12px;
-      border-radius: 999px;
-      background: var(--pink-mist);
-      border: 1px solid var(--line);
-    }
-
-    .section-title {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 1.9rem;
-      letter-spacing: 0.01em;
-      color: var(--ink);
-      text-align: center;
-      margin: 60px 0 28px;
-    }
-
-    .features {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
-      gap: 16px;
-    }
-
-    .feat {
-      background: var(--panel);
-      backdrop-filter: blur(12px);
-      border: 1px solid var(--line);
-      border-radius: 20px;
-      padding: 22px 20px;
-      display: flex;
-      align-items: flex-start;
-      gap: 14px;
-      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
-      animation: slide-up 0.5s ease both;
-      box-shadow: 0 8px 24px rgba(17, 17, 17, 0.05);
-    }
-
-    .feat:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 14px 28px rgba(17, 17, 17, 0.08);
-      border-color: rgba(255, 79, 174, 0.35);
-    }
-
-    .feat-icon {
-      font-size: 1.35rem;
-      flex-shrink: 0;
-      width: 46px;
-      height: 46px;
-      background: var(--surface-strong);
-      border: 1px solid rgba(255, 79, 174, 0.18);
-      border-radius: 14px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .feat-text h3 {
-      font-size: 0.95rem;
-      font-weight: 800;
-      color: var(--ink);
-      margin-bottom: 4px;
-    }
-
-    .feat-text p {
-      font-size: 0.82rem;
-      color: var(--ink-soft);
-      line-height: 1.55;
-    }
-
-    .feat:nth-child(1)  { animation-delay: 0.05s; }
-    .feat:nth-child(2)  { animation-delay: 0.10s; }
-    .feat:nth-child(3)  { animation-delay: 0.15s; }
-    .feat:nth-child(4)  { animation-delay: 0.20s; }
-    .feat:nth-child(5)  { animation-delay: 0.25s; }
-    .feat:nth-child(6)  { animation-delay: 0.30s; }
-    .feat:nth-child(7)  { animation-delay: 0.35s; }
-    .feat:nth-child(8)  { animation-delay: 0.40s; }
-    .feat:nth-child(9)  { animation-delay: 0.45s; }
-    .feat:nth-child(10) { animation-delay: 0.50s; }
-    .feat:nth-child(11) { animation-delay: 0.55s; }
-    .feat:nth-child(12) { animation-delay: 0.60s; }
-
-    .steps { margin-top: 60px; }
-
-    .steps-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
-      gap: 14px;
-    }
-
-    .step {
-      background: linear-gradient(145deg, rgba(255, 255, 255, 0.96), rgba(255, 232, 243, 0.88));
-      border-radius: 18px;
-      padding: 20px 18px;
-      text-align: center;
-      border: 1px solid var(--line);
-      position: relative;
-      box-shadow: 0 8px 24px rgba(17, 17, 17, 0.05);
-    }
-
-    .step-num {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 2.4rem;
-      color: var(--surface-strong);
-      line-height: 1;
-      margin-bottom: 8px;
-      -webkit-text-stroke: 1px var(--accent-strong);
-    }
-
-    .step h3 {
-      font-size: 0.92rem;
-      font-weight: 800;
-      margin-bottom: 5px;
-      color: var(--ink);
-    }
-
-    .step p {
-      font-size: 0.8rem;
-      color: var(--ink-soft);
-      line-height: 1.55;
-    }
-
-    footer {
-      text-align: center;
-      margin-top: 70px;
-      padding-top: 28px;
-      border-top: 1px solid var(--line);
-      font-size: 0.85rem;
-      color: var(--ink-soft);
-      font-weight: 600;
-    }
-
-    footer a {
-      color: var(--accent);
-      text-decoration: none;
-    }
-
-    footer a:hover { text-decoration: underline; }
-
-    @media (max-width: 640px) {
-      .page { padding: 32px 18px 64px; }
-      .hero { padding-top: 42px; }
-      .btn-download { width: 100%; justify-content: center; }
-    }
-  </style>
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <div class="blob-bg">
+  <div class="blob-bg" aria-hidden="true">
     <div class="blob blob-1"></div>
     <div class="blob blob-2"></div>
     <div class="blob blob-3"></div>
   </div>
 
-  <div class="page">
-    <div class="hero">
-      <img class="hero-logo" src="logo2.png" alt="Tubonge logo" loading="eager" decoding="async" />
+  <main class="page">
+    <section class="hero">
+      <div class="hero-brand">
+        <img class="hero-logo" src="logo2.png" alt="Tubonge logo" loading="eager" decoding="async" />
+      </div>
       <h1 class="sr-only">Tubonge</h1>
       <p class="tagline">A cleaner way to stay connected with group conversations, private messages, and fast mobile sharing.</p>
 
       <div class="dl-wrap">
-        <a class="btn-download" href="tubonge.apk" download id="dlBtn">
+        <a class="btn-download" href="/download/tubonge.apk" download id="dlBtn">
           <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
             <polyline points="7 10 12 15 17 10" />
@@ -359,129 +33,255 @@
           </svg>
           Download APK
         </a>
+        <a class="btn-secondary" href="#rating-section">Leave a Rating</a>
       </div>
 
       <p class="dl-note"><span>Android only - Free to use</span></p>
-    </div>
 
-    <h2 class="section-title">What You Get</h2>
-    <div class="features">
-      <div class="feat">
-        <div class="feat-icon">GC</div>
-        <div class="feat-text">
-          <h3>Group Chat</h3>
-          <p>Realtime group messaging with replies, image sharing, and voice messages.</p>
-        </div>
+      <div class="hero-metrics">
+        <article class="metric-card compact">
+          <span class="metric-label">Downloads</span>
+          <strong class="metric-value" data-download-count>0</strong>
+        </article>
+        <article class="metric-card compact">
+          <span class="metric-label">Average Rating</span>
+          <strong class="metric-value"><span data-average-rating>0.0</span> / 5</strong>
+        </article>
+        <article class="metric-card compact">
+          <span class="metric-label">Ratings</span>
+          <strong class="metric-value" data-rating-count>0</strong>
+        </article>
       </div>
-      <div class="feat">
-        <div class="feat-icon">DM</div>
-        <div class="feat-text">
-          <h3>Private DMs</h3>
-          <p>1-on-1 private threads with unread badges and per-thread highlighting.</p>
-        </div>
-      </div>
-      <div class="feat">
-        <div class="feat-icon">OK</div>
-        <div class="feat-text">
-          <h3>Read Receipts</h3>
-          <p>See sent and read status on every private message you send.</p>
-        </div>
-      </div>
-      <div class="feat">
-        <div class="feat-icon">ON</div>
-        <div class="feat-text">
-          <h3>Online Presence</h3>
-          <p>Live online and offline badges with a current view of active users.</p>
-        </div>
-      </div>
-      <div class="feat">
-        <div class="feat-icon">VM</div>
-        <div class="feat-text">
-          <h3>Voice Messages</h3>
-          <p>Record up to 15-second voice notes with a timer and playback indicator.</p>
-        </div>
-      </div>
-      <div class="feat">
-        <div class="feat-icon">IM</div>
-        <div class="feat-text">
-          <h3>Image Sharing</h3>
-          <p>Send images in group and private chats with smooth upload progress.</p>
-        </div>
-      </div>
-      <div class="feat">
-        <div class="feat-icon">RP</div>
-        <div class="feat-text">
-          <h3>Message Replies</h3>
-          <p>Reply to any group message with a preview and inline reply block.</p>
-        </div>
-      </div>
-      <div class="feat">
-        <div class="feat-icon">PF</div>
-        <div class="feat-text">
-          <h3>Profile Editor</h3>
-          <p>Set your display name, bio, and choose a custom avatar.</p>
-        </div>
-      </div>
-      <div class="feat">
-        <div class="feat-icon">SL</div>
-        <div class="feat-text">
-          <h3>Secure Login</h3>
-          <p>Username and password sign-up with persistent session support.</p>
-        </div>
-      </div>
-      <div class="feat">
-        <div class="feat-icon">AD</div>
-        <div class="feat-text">
-          <h3>Admin Console</h3>
-          <p>Admin access with tools for moderating and managing group activity.</p>
-        </div>
-      </div>
-      <div class="feat">
-        <div class="feat-icon">MB</div>
-        <div class="feat-text">
-          <h3>Mobile Optimized</h3>
-          <p>Responsive layout, sticky composer, and keyboard-aware behavior on mobile.</p>
-        </div>
-      </div>
-      <div class="feat">
-        <div class="feat-icon">AC</div>
-        <div class="feat-text">
-          <h3>Accent Colors</h3>
-          <p>Per-user color accents on message avatars to keep conversations easy to scan.</p>
-        </div>
-      </div>
-    </div>
+    </section>
 
-    <div class="steps">
-      <h2 class="section-title">Installation</h2>
+    <section aria-labelledby="features-title">
+      <h2 class="section-title" id="features-title">What You Get</h2>
+      <div class="features">
+        <article class="feat">
+          <div class="feat-icon">GC</div>
+          <div class="feat-text">
+            <h3>Group Chat</h3>
+            <p>Realtime group messaging with replies, image sharing, and voice messages.</p>
+          </div>
+        </article>
+        <article class="feat">
+          <div class="feat-icon">DM</div>
+          <div class="feat-text">
+            <h3>Private DMs</h3>
+            <p>1-on-1 private threads with unread badges and per-thread highlighting.</p>
+          </div>
+        </article>
+        <article class="feat">
+          <div class="feat-icon">OK</div>
+          <div class="feat-text">
+            <h3>Read Receipts</h3>
+            <p>See sent and read status on every private message you send.</p>
+          </div>
+        </article>
+        <article class="feat">
+          <div class="feat-icon">ON</div>
+          <div class="feat-text">
+            <h3>Online Presence</h3>
+            <p>Live online and offline badges with a current view of active users.</p>
+          </div>
+        </article>
+        <article class="feat">
+          <div class="feat-icon">VM</div>
+          <div class="feat-text">
+            <h3>Voice Messages</h3>
+            <p>Record up to 15-second voice notes with a timer and playback indicator.</p>
+          </div>
+        </article>
+        <article class="feat">
+          <div class="feat-icon">IM</div>
+          <div class="feat-text">
+            <h3>Image Sharing</h3>
+            <p>Send images in group and private chats with smooth upload progress.</p>
+          </div>
+        </article>
+        <article class="feat">
+          <div class="feat-icon">RP</div>
+          <div class="feat-text">
+            <h3>Message Replies</h3>
+            <p>Reply to any group message with a preview and inline reply block.</p>
+          </div>
+        </article>
+        <article class="feat">
+          <div class="feat-icon">PF</div>
+          <div class="feat-text">
+            <h3>Profile Editor</h3>
+            <p>Set your display name, bio, and choose a custom avatar.</p>
+          </div>
+        </article>
+        <article class="feat">
+          <div class="feat-icon">SL</div>
+          <div class="feat-text">
+            <h3>Secure Login</h3>
+            <p>Username and password sign-up with persistent session support.</p>
+          </div>
+        </article>
+        <article class="feat">
+          <div class="feat-icon">AD</div>
+          <div class="feat-text">
+            <h3>Admin Console</h3>
+            <p>Admin access with tools for moderating and managing group activity.</p>
+          </div>
+        </article>
+        <article class="feat">
+          <div class="feat-icon">MB</div>
+          <div class="feat-text">
+            <h3>Mobile Optimized</h3>
+            <p>Responsive layout, sticky composer, and keyboard-aware behavior on mobile.</p>
+          </div>
+        </article>
+        <article class="feat">
+          <div class="feat-icon">AC</div>
+          <div class="feat-text">
+            <h3>Accent Colors</h3>
+            <p>Per-user color accents on message avatars to keep conversations easy to scan.</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section aria-labelledby="activity-title">
+      <h2 class="section-title" id="activity-title">Live Activity</h2>
+      <div class="info-grid">
+        <article class="panel-card">
+          <div class="panel-head">
+            <div>
+              <h3>Recent Downloads</h3>
+              <p>Tracked from the server download route.</p>
+            </div>
+            <span class="pill" data-download-count>0 total</span>
+          </div>
+          <ul class="activity-list" data-download-list>
+            <li class="empty-state">No downloads recorded yet.</li>
+          </ul>
+        </article>
+
+        <article class="panel-card">
+          <div class="panel-head">
+            <div>
+              <h3>Ratings Snapshot</h3>
+              <p data-rating-summary>Be the first person to rate Tubonge.</p>
+            </div>
+            <span class="pill"><span data-average-rating>0.0</span> / 5</span>
+          </div>
+          <ul class="review-list" data-rating-list>
+            <li class="empty-state">No ratings submitted yet.</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section class="steps" aria-labelledby="install-title">
+      <h2 class="section-title" id="install-title">Installation</h2>
       <div class="steps-grid">
-        <div class="step">
+        <article class="step">
           <div class="step-num">1</div>
           <h3>Download</h3>
           <p>Use the download button above to get the APK file.</p>
-        </div>
-        <div class="step">
+        </article>
+        <article class="step">
           <div class="step-num">2</div>
           <h3>Allow Installs</h3>
           <p>Open <strong>Settings &gt; Security</strong> and allow app installs from your browser.</p>
-        </div>
-        <div class="step">
+        </article>
+        <article class="step">
           <div class="step-num">3</div>
           <h3>Open the APK</h3>
           <p>Find <strong>tubonge.apk</strong> in your Downloads folder and open it.</p>
-        </div>
-        <div class="step">
+        </article>
+        <article class="step">
           <div class="step-num">4</div>
           <h3>Install</h3>
           <p>Complete the install, open Tubonge, and sign in to start chatting.</p>
-        </div>
+        </article>
       </div>
-    </div>
+    </section>
+
+    <section class="rating-section" id="rating-section" aria-labelledby="rating-title">
+      <h2 class="section-title" id="rating-title">Rate Tubonge</h2>
+      <div class="rating-grid">
+        <article class="panel-card">
+          <div class="panel-head">
+            <div>
+              <h3>Leave a Rating</h3>
+              <p>Share a quick score and short comment for other visitors.</p>
+            </div>
+          </div>
+
+          <form class="rating-form" id="ratingForm">
+            <fieldset class="rating-stars">
+              <legend>Choose a rating</legend>
+              <div class="star-row">
+                <div class="star-option">
+                  <input type="radio" id="star5" name="stars" value="5" />
+                  <label for="star5">5</label>
+                </div>
+                <div class="star-option">
+                  <input type="radio" id="star4" name="stars" value="4" />
+                  <label for="star4">4</label>
+                </div>
+                <div class="star-option">
+                  <input type="radio" id="star3" name="stars" value="3" />
+                  <label for="star3">3</label>
+                </div>
+                <div class="star-option">
+                  <input type="radio" id="star2" name="stars" value="2" />
+                  <label for="star2">2</label>
+                </div>
+                <div class="star-option">
+                  <input type="radio" id="star1" name="stars" value="1" />
+                  <label for="star1">1</label>
+                </div>
+              </div>
+            </fieldset>
+
+            <label class="field">
+              <span>Name</span>
+              <input type="text" name="name" maxlength="40" placeholder="Optional" />
+            </label>
+
+            <label class="field">
+              <span>Comment</span>
+              <textarea name="comment" rows="4" maxlength="240" placeholder="What did you think?"></textarea>
+            </label>
+
+            <div class="form-actions">
+              <button class="btn-secondary solid" type="submit">Submit Rating</button>
+              <p class="form-status" id="ratingStatus" aria-live="polite"></p>
+            </div>
+          </form>
+        </article>
+
+        <article class="panel-card highlight-card">
+          <div class="panel-head">
+            <div>
+              <h3>Current Score</h3>
+              <p>Live totals update as downloads and ratings come in.</p>
+            </div>
+          </div>
+          <div class="score-card">
+            <strong><span data-average-rating>0.0</span> / 5</strong>
+            <span><span data-rating-count>0</span> ratings</span>
+          </div>
+          <ul class="mini-list">
+            <li>Total downloads: <strong data-download-count>0</strong></li>
+            <li>Total ratings: <strong data-rating-count>0</strong></li>
+            <li>Download flow redirects to a thank-you page automatically.</li>
+          </ul>
+        </article>
+      </div>
+    </section>
 
     <footer>
-      <p>Tubonge v1.0 - <a href="tubonge.apk" download>Download APK</a></p>
-      <p style="margin-top: 6px; opacity: 0.78;">Android package for direct install</p>
+      <p>Tubonge v1.0 - <a href="/download/tubonge.apk" download>Download APK</a></p>
+      <p class="footer-note">Run the site through the included Node server so downloads and ratings are stored.</p>
     </footer>
-  </div>
+  </main>
+
+  <script src="app.js" defer></script>
 </body>
 </html>
