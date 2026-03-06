@@ -8,7 +8,6 @@ const PORT = Number(process.env.PORT) || 3000;
 const ROOT_DIR = __dirname;
 const DATA_DIR = path.join(ROOT_DIR, "data");
 const DATA_FILE = path.join(DATA_DIR, "site-data.json");
-const MAX_BODY_SIZE = 16 * 1024;
 
 const STATIC_ROUTES = new Map([
   ["/", "index.html"],
@@ -46,7 +45,6 @@ function getContentType(filePath) {
 function normalizeStore(store) {
   return {
     downloads: Array.isArray(store?.downloads) ? store.downloads : [],
-    ratings: Array.isArray(store?.ratings) ? store.ratings : [],
   };
 }
 
@@ -56,7 +54,7 @@ async function ensureDataFile() {
   try {
     await fsp.access(DATA_FILE);
   } catch {
-    await fsp.writeFile(DATA_FILE, JSON.stringify({ downloads: [], ratings: [] }, null, 2));
+    await fsp.writeFile(DATA_FILE, JSON.stringify({ downloads: [] }, null, 2));
   }
 }
 
@@ -67,7 +65,7 @@ async function readStore() {
   try {
     return normalizeStore(JSON.parse(raw));
   } catch {
-    return { downloads: [], ratings: [] };
+    return { downloads: [] };
   }
 }
 
@@ -88,30 +86,14 @@ async function withStoreLock(mutator) {
   return operation;
 }
 
-function sanitizeText(value, maxLength) {
-  return String(value || "")
-    .trim()
-    .replace(/\s+/g, " ")
-    .slice(0, maxLength);
-}
-
 function summarizeStore(store) {
-  const ratings = [...store.ratings].sort((a, b) => b.timestamp.localeCompare(a.timestamp));
-  const recentRatings = ratings.slice(0, 6);
   const recentDownloads = [...store.downloads]
     .sort((a, b) => b.timestamp.localeCompare(a.timestamp))
     .slice(0, 8);
 
-  const ratingCount = ratings.length;
-  const ratingTotal = ratings.reduce((sum, entry) => sum + Number(entry.stars || 0), 0);
-  const averageRating = ratingCount ? Number((ratingTotal / ratingCount).toFixed(1)) : 0;
-
   return {
     downloadCount: store.downloads.length,
-    ratingCount,
-    averageRating,
     recentDownloads,
-    recentRatings,
   };
 }
 
@@ -128,31 +110,6 @@ function sendText(response, statusCode, message) {
     "Content-Type": "text/plain; charset=utf-8",
   });
   response.end(message);
-}
-
-function readRequestBody(request) {
-  return new Promise((resolve, reject) => {
-    let size = 0;
-    const chunks = [];
-
-    request.on("data", (chunk) => {
-      size += chunk.length;
-
-      if (size > MAX_BODY_SIZE) {
-        reject(new Error("Request body too large."));
-        request.destroy();
-        return;
-      }
-
-      chunks.push(chunk);
-    });
-
-    request.on("end", () => {
-      resolve(Buffer.concat(chunks).toString("utf8"));
-    });
-
-    request.on("error", reject);
-  });
 }
 
 async function serveFile(response, filePath, extraHeaders = {}) {
@@ -172,39 +129,6 @@ async function serveFile(response, filePath, extraHeaders = {}) {
 async function handleStats(response) {
   const store = await readStore();
   sendJson(response, 200, summarizeStore(store));
-}
-
-async function handleRating(request, response) {
-  const rawBody = await readRequestBody(request);
-  let payload;
-
-  try {
-    payload = JSON.parse(rawBody || "{}");
-  } catch {
-    sendJson(response, 400, { error: "Invalid JSON payload." });
-    return;
-  }
-
-  const stars = Number(payload.stars);
-  const name = sanitizeText(payload.name, 40);
-  const comment = sanitizeText(payload.comment, 240);
-
-  if (!Number.isInteger(stars) || stars < 1 || stars > 5) {
-    sendJson(response, 400, { error: "Rating must be between 1 and 5." });
-    return;
-  }
-
-  await withStoreLock((store) => {
-    store.ratings.push({
-      id: randomUUID(),
-      name,
-      comment,
-      stars,
-      timestamp: new Date().toISOString(),
-    });
-  });
-
-  sendJson(response, 201, { ok: true });
 }
 
 async function handleDownload(response) {
@@ -229,11 +153,6 @@ const server = http.createServer(async (request, response) => {
 
     if (request.method === "GET" && url.pathname === "/api/stats") {
       await handleStats(response);
-      return;
-    }
-
-    if (request.method === "POST" && url.pathname === "/api/ratings") {
-      await handleRating(request, response);
       return;
     }
 

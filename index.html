@@ -33,7 +33,7 @@
           </svg>
           Download APK
         </a>
-        <a class="btn-secondary" href="#rating-section">Leave a Rating</a>
+        <a class="btn-secondary" href="#activity-title">View Downloads</a>
       </div>
 
       <p class="dl-note"><span>Android only - Free to use</span></p>
@@ -44,12 +44,12 @@
           <strong class="metric-value" data-download-count>0</strong>
         </article>
         <article class="metric-card compact">
-          <span class="metric-label">Average Rating</span>
-          <strong class="metric-value"><span data-average-rating>0.0</span> / 5</strong>
+          <span class="metric-label">Platform</span>
+          <strong class="metric-value">Android</strong>
         </article>
         <article class="metric-card compact">
-          <span class="metric-label">Ratings</span>
-          <strong class="metric-value" data-rating-count>0</strong>
+          <span class="metric-label">Format</span>
+          <strong class="metric-value">APK</strong>
         </article>
       </div>
     </section>
@@ -146,33 +146,18 @@
 
     <section aria-labelledby="activity-title">
       <h2 class="section-title" id="activity-title">Live Activity</h2>
-      <div class="info-grid">
-        <article class="panel-card">
-          <div class="panel-head">
-            <div>
-              <h3>Recent Downloads</h3>
-              <p>Tracked from the server download route.</p>
-            </div>
-            <span class="pill" data-download-count>0 total</span>
+      <article class="panel-card">
+        <div class="panel-head">
+          <div>
+            <h3>Recent Downloads</h3>
+            <p>The counter updates each time the APK button is used in this browser.</p>
           </div>
-          <ul class="activity-list" data-download-list>
-            <li class="empty-state">No downloads recorded yet.</li>
-          </ul>
-        </article>
-
-        <article class="panel-card">
-          <div class="panel-head">
-            <div>
-              <h3>Ratings Snapshot</h3>
-              <p data-rating-summary>Be the first person to rate Tubonge.</p>
-            </div>
-            <span class="pill"><span data-average-rating>0.0</span> / 5</span>
-          </div>
-          <ul class="review-list" data-rating-list>
-            <li class="empty-state">No ratings submitted yet.</li>
-          </ul>
-        </article>
-      </div>
+          <span class="pill" data-download-count>0 total</span>
+        </div>
+        <ul class="activity-list" data-download-list>
+          <li class="empty-state">No downloads recorded yet.</li>
+        </ul>
+      </article>
     </section>
 
     <section class="steps" aria-labelledby="install-title">
@@ -201,87 +186,12 @@
       </div>
     </section>
 
-    <section class="rating-section" id="rating-section" aria-labelledby="rating-title">
-      <h2 class="section-title" id="rating-title">Rate Tubonge</h2>
-      <div class="rating-grid">
-        <article class="panel-card">
-          <div class="panel-head">
-            <div>
-              <h3>Leave a Rating</h3>
-              <p>Share a quick score and short comment for other visitors.</p>
-            </div>
-          </div>
-
-          <form class="rating-form" id="ratingForm">
-            <fieldset class="rating-stars">
-              <legend>Choose a rating</legend>
-              <div class="star-row">
-                <div class="star-option">
-                  <input type="radio" id="star5" name="stars" value="5" />
-                  <label for="star5">5</label>
-                </div>
-                <div class="star-option">
-                  <input type="radio" id="star4" name="stars" value="4" />
-                  <label for="star4">4</label>
-                </div>
-                <div class="star-option">
-                  <input type="radio" id="star3" name="stars" value="3" />
-                  <label for="star3">3</label>
-                </div>
-                <div class="star-option">
-                  <input type="radio" id="star2" name="stars" value="2" />
-                  <label for="star2">2</label>
-                </div>
-                <div class="star-option">
-                  <input type="radio" id="star1" name="stars" value="1" />
-                  <label for="star1">1</label>
-                </div>
-              </div>
-            </fieldset>
-
-            <label class="field">
-              <span>Name</span>
-              <input type="text" name="name" maxlength="40" placeholder="Optional" />
-            </label>
-
-            <label class="field">
-              <span>Comment</span>
-              <textarea name="comment" rows="4" maxlength="240" placeholder="What did you think?"></textarea>
-            </label>
-
-            <div class="form-actions">
-              <button class="btn-secondary solid" type="submit">Submit Rating</button>
-              <p class="form-status" id="ratingStatus" aria-live="polite"></p>
-            </div>
-          </form>
-        </article>
-
-        <article class="panel-card highlight-card">
-          <div class="panel-head">
-            <div>
-              <h3>Current Score</h3>
-              <p>Live totals update as downloads and ratings come in.</p>
-            </div>
-          </div>
-          <div class="score-card">
-            <strong><span data-average-rating>0.0</span> / 5</strong>
-            <span><span data-rating-count>0</span> ratings</span>
-          </div>
-          <ul class="mini-list">
-            <li>Total downloads: <strong data-download-count>0</strong></li>
-            <li>Total ratings: <strong data-rating-count>0</strong></li>
-            <li>Download flow redirects to a thank-you page automatically.</li>
-          </ul>
-        </article>
-      </div>
-    </section>
-
     <footer>
       <p>Tubonge v1.0 - <a href="tubonge.apk" download>Download APK</a></p>
-      <p class="footer-note">Run the included Node server for shared download and rating tracking. Without it, ratings stay on this device.</p>
+      <p class="footer-note">Download activity is saved in this browser so the counter keeps working on GitHub Pages.</p>
     </footer>
   </main>
 
-  <script src="app.js?v=20260306-1" defer></script>
+  <script src="app.js?v=20260306-2" defer></script>
 </body>
 </html>

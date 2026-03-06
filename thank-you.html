@@ -22,7 +22,7 @@
         <img class="hero-logo" src="logo2.png" alt="Tubonge logo" loading="eager" decoding="async" />
       </div>
       <h1 class="page-title">Thank You</h1>
-      <p class="tagline">Your download should already be running. Install the APK, open Tubonge, and then leave a rating when you are ready.</p>
+      <p class="tagline">Your download should already be running. Install the APK, open Tubonge, and come back here any time you need it again.</p>
 
       <div class="dl-wrap">
         <a class="btn-download" href="tubonge.apk" download id="dlBtn">
@@ -42,12 +42,12 @@
           <strong class="metric-value" data-download-count>0</strong>
         </article>
         <article class="metric-card compact">
-          <span class="metric-label">Average Rating</span>
-          <strong class="metric-value"><span data-average-rating>0.0</span> / 5</strong>
+          <span class="metric-label">Platform</span>
+          <strong class="metric-value">Android</strong>
         </article>
         <article class="metric-card compact">
-          <span class="metric-label">Ratings</span>
-          <strong class="metric-value" data-rating-count>0</strong>
+          <span class="metric-label">Format</span>
+          <strong class="metric-value">APK</strong>
         </article>
       </div>
     </section>
@@ -72,78 +72,8 @@
         </article>
         <article class="step">
           <div class="step-num">4</div>
-          <h3>Leave a Rating</h3>
-          <p>Come back to this page and submit a quick rating once you have used it.</p>
-        </article>
-      </div>
-    </section>
-
-    <section class="rating-section" aria-labelledby="rate-now-title">
-      <h2 class="section-title" id="rate-now-title">Leave a Rating</h2>
-      <div class="rating-grid">
-        <article class="panel-card">
-          <div class="panel-head">
-            <div>
-              <h3>Tell Us How It Went</h3>
-              <p>Short comments are enough. Ratings are shown live on the site.</p>
-            </div>
-          </div>
-
-          <form class="rating-form" id="ratingForm">
-            <fieldset class="rating-stars">
-              <legend>Choose a rating</legend>
-              <div class="star-row">
-                <div class="star-option">
-                  <input type="radio" id="thanks-star5" name="stars" value="5" />
-                  <label for="thanks-star5">5</label>
-                </div>
-                <div class="star-option">
-                  <input type="radio" id="thanks-star4" name="stars" value="4" />
-                  <label for="thanks-star4">4</label>
-                </div>
-                <div class="star-option">
-                  <input type="radio" id="thanks-star3" name="stars" value="3" />
-                  <label for="thanks-star3">3</label>
-                </div>
-                <div class="star-option">
-                  <input type="radio" id="thanks-star2" name="stars" value="2" />
-                  <label for="thanks-star2">2</label>
-                </div>
-                <div class="star-option">
-                  <input type="radio" id="thanks-star1" name="stars" value="1" />
-                  <label for="thanks-star1">1</label>
-                </div>
-              </div>
-            </fieldset>
-
-            <label class="field">
-              <span>Name</span>
-              <input type="text" name="name" maxlength="40" placeholder="Optional" />
-            </label>
-
-            <label class="field">
-              <span>Comment</span>
-              <textarea name="comment" rows="4" maxlength="240" placeholder="How was the install or app experience?"></textarea>
-            </label>
-
-            <div class="form-actions">
-              <button class="btn-secondary solid" type="submit">Submit Rating</button>
-              <p class="form-status" id="ratingStatus" aria-live="polite"></p>
-            </div>
-          </form>
-        </article>
-
-        <article class="panel-card">
-          <div class="panel-head">
-            <div>
-              <h3>Recent Ratings</h3>
-              <p data-rating-summary>Be the first person to rate Tubonge.</p>
-            </div>
-            <span class="pill"><span data-average-rating>0.0</span> / 5</span>
-          </div>
-          <ul class="review-list" data-rating-list>
-            <li class="empty-state">No ratings submitted yet.</li>
-          </ul>
+          <h3>Download Again</h3>
+          <p>Use this page any time you want to download the APK again on this device.</p>
         </article>
       </div>
     </section>
@@ -154,7 +84,7 @@
         <div class="panel-head">
           <div>
             <h3>Download Log</h3>
-            <p>Recent APK downloads recorded by the server.</p>
+            <p>The counter updates each time the APK button is used in this browser.</p>
           </div>
           <span class="pill" data-download-count>0 total</span>
         </div>
@@ -166,10 +96,10 @@
 
     <footer>
       <p>Tubonge v1.0 - <a href="index.html">Back to home page</a></p>
-      <p class="footer-note">Run the included Node server for shared download and rating tracking. Without it, ratings stay on this device.</p>
+      <p class="footer-note">Download activity is saved in this browser so the counter keeps working on GitHub Pages.</p>
     </footer>
   </main>
 
-  <script src="app.js?v=20260306-1" defer></script>
+  <script src="app.js?v=20260306-2" defer></script>
 </body>
 </html>
