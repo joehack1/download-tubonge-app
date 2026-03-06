@@ -6,4 +6,4 @@ workers_dev = true
 [[d1_databases]]
 binding = "DB"
 database_name = "tubonge-download-counter"
-database_id = "REPLACE_WITH_YOUR_D1_DATABASE_ID"
+database_id = "51a1fe9e-c80b-4b1e-a98f-8b1e122b9221"

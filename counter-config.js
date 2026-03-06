@@ -1,4 +1,4 @@
 window.TUBONGE_COUNTER_CONFIG = {
-  // Example: "https://tubonge-download-counter.<your-subdomain>.workers.dev"
-  apiBaseUrl: "",
+  
+  apiBaseUrl: "https://tubonge-download-counter.joehack1.workers.dev",
 };
